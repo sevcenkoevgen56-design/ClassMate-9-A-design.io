@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="uk" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ClassMate - Чат та Щоденник</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>💬</text></svg>">
+</head>
+<body>
+    <!-- Сповіщення -->
+    <div class="notifications-container" id="notificationsContainer"></div>
+
+    <!-- Бокова панель -->
+    <aside class="sidebar" id="sidebar">
+        <div class="logo-section">
+            <div class="logo">
+                <i class="fas fa-comments"></i>
+                <h1>ClassMate</h1>
+            </div>
+            <p class="subtitle">Чат • Щоденник • Спільнота</p>
+        </div>
+
+        <!-- Навігація -->
+        <nav class="nav-menu">
+            <button class="nav-btn active" data-page="chat">
+                <i class="fas fa-comment-dots"></i>
+                <span>Чат класу</span>
+            </button>
+            <button class="nav-btn" data-page="diary">
+                <i class="fas fa-book"></i>
+                <span>Електронний щоденник</span>
+            </button>
+            <button class="nav-btn" data-page="schedule">
+                <i class="fas fa-calendar-alt"></i>
+                <span>Розклад</span>
+            </button>
+            <button class="nav-btn" data-page="homework">
+                <i class="fas fa-tasks"></i>
+                <span>Домашні завдання</span>
+            </button>
+            <button class="nav-btn" data-page="grades">
+                <i class="fas fa-chart-line"></i>
+                <span>Оцінки</span>
+            </button>
+        </nav>
+
+        <!-- Інформація про користувача -->
+        <div class="user-profile">
+            <div class="avatar-large" id="userAvatar">👤</div>
+            <div class="user-info">
+                <h3 id="userName">Гість</h3>
+                <p id="userClass">Клас не обрано</p>
+                <div class="user-status">
+                    <span class="status-dot online"></span>
+                    <span class="status-text">Онлайн</span>
+                </div>
+            </div>
+            <button class="settings-btn" id="settingsBtn" title="Налаштування">
+                <i class="fas fa-cog"></i>
+            </button>
+        </div>
+    </aside>
+
+    <!-- Головний контент -->
+    <main class="main-content">
+        <!-- Заголовок сторінки -->
+        <header class="page-header">
+            <div class="header-left">
+                <h2 id="pageTitle">Чат класу</h2>
+                <p id="pageSubtitle">Спілкуйтесь та обмінюйтесь інформацією</p>
+            </div>
+            <div class="header-right">
+                <div class="date-display">
+                    <i class="fas fa-calendar-day"></i>
+                    <span id="currentDate">...</span>
+                </div>
+                <button class="theme-toggle" id="themeToggle" title="Перемкнути тему">
+                    <i class="fas fa-moon"></i>
+                </button>
+            </div>
+        </header>
+
+        <!-- Контейнер для всіх сторінок -->
+        <div class="page-container">
+            <!-- СТОРІНКА ЧАТУ -->
+            <div class="page active" id="chatPage">
+                <div class="chat-container">
+                    <!-- Заголовок чату -->
+                    <div class="chat-header">
+                        <div class="chat-info">
+                            <h3><i class="fas fa-hashtag"></i> загальний</h3>
+                            <div class="chat-stats">
+                                <span class="stat">
+                                    <i class="fas fa-users"></i>
+                                    <span id="onlineCount">1</span> онлайн
+                                </span>
+                                <span class="stat">
+                                    <i class="fas fa-comment"></i>
+                                    <span id="messageCount">0</span> повідомлень
+                                </span>
+                            </div>
+                        </div>
+                        <div class="chat-actions">
+                            <button class="action-btn" id="clearChatBtn" title="Очистити чат">
+                                <i class="fas fa-trash-alt"></i>
+                            </button>
+                            <button class="action-btn" id="imageUploadBtn" title="Завантажити зображення">
+                                <i class="fas fa-image"></i>
+                            </button>
+                            <button class="action-btn" id="emojiBtn" title="Емодзі">
+                                <i class="far fa-smile"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Контейнер повідомлень -->
+                    <div class="messages-container" id="messagesContainer">
+                        <div class="welcome-message">
+                            <div class="welcome-icon">
+                                <i class="fas fa-graduation-cap"></i>
+                            </div>
+                            <h3>Ласкаво просимо до чату класу!</h3>
+                            <p>Це безпечний простір для спілкування однокласників</p>
+                            <div class="welcome-tips">
+                                <div class="tip">
+                                    <i class="fas fa-shield-alt"></i>
+                                    <span>Приватний чат тільки для вашого класу</span>
+                                </div>
+                                <div class="tip">
+                                    <i class="fas fa-images"></i>
+                                    <span>Додавайте зображення та файли</span>
+                                </div>
+                                <div class="tip">
+                                    <i class="fas fa-smile"></i>
+                                    <span>Використовуйте емодзі та стикери</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Панель вводу -->
+                    <div class="input-container">
+                        <div class="input-wrapper">
+                            <div class="input-tools">
+                                <button class="tool-btn" id="voiceBtn" title="Голосове повідомлення">
+                                    <i class="fas fa-microphone"></i>
+                                </button>
+                                <button class="tool-btn" id="formatBtn" title="Формат тексту">
+                                    <i class="fas fa-bold"></i>
+                                </button>
+                                <button class="tool-btn" id="spoilerBtn" title="Спойлер">
+                                    <i class="fas fa-eye-slash"></i>
+                                </button>
+                            </div>
+                            <textarea 
+                                id="messageInput" 
+                                placeholder="Напишіть повідомлення... (Shift+Enter для нового рядка)"
+                                rows="1"></textarea>
+                            <button class="send-btn" id="sendBtn">
+                                <i class="fas fa-paper-plane"></i>
+                            </button>
+                        </div>
+                        <div class="input-footer">
+                            <span class="hint">
+                                <i class="fas fa-info-circle"></i>
+                                Enter - відправити • Ctrl+Enter - новий рядок
+                            </span>
+                            <span class="typing-indicator" id="typingIndicator"></span>
+                        </div>
+                    </div>
+
+                    <!-- Учасники онлайн -->
+                    <div class="online-users">
+                        <h4><i class="fas fa-user-clock"></i> Активні зараз:</h4>
+                        <div class="users-grid" id="usersGrid">
+                            <!-- Буде заповнено JavaScript -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- СТОРІНКА ЩОДЕННИКА -->
+            <div class="page" id="diaryPage">
+                <div class="diary-container">
+                    <div class="diary-header">
+                        <h2><i class="fas fa-book-open"></i> Електронний щоденник</h2>
+                        <div class="diary-controls">
+                            <button class="btn-primary" id="addEntryBtn">
+                                <i class="fas fa-plus"></i> Додати запис
+                            </button>
+                            <div class="date-selector">
+                                <button class="date-nav" id="prevDayBtn">
+                                    <i class="fas fa-chevron-left"></i>
+                                </button>
+                                <input type="date" id="diaryDate" value="">
+                                <button class="date-nav" id="nextDayBtn">
+                                    <i class="fas fa-chevron-right"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Статистика щоденника -->
+                    <div class="diary-stats">
+                        <div class="stat-card">
+                            <div class="stat-icon">
+                                <i class="fas fa-edit"></i>
+                            </div>
+                            <div class="stat-info">
+                                <h3 id="entriesCount">0</h3>
+                                <p>записів</p>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon">
+                                <i class="fas fa-star"></i>
+                            </div>
+                            <div class="stat-info">
+                                <h3 id="streakDays">0</h3>
+                                <p>днів поспіль</p>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon">
+                                <i class="fas fa-trophy"></i>
+                            </div>
+                            <div class="stat-info">
+                                <h3 id="achievements">0</h3>
+                                <p>досягнень</p>
+                            </div>
+                        </div>
+                        <div class="stat-card mood-card">
+                            <div class="stat-icon">
+                                <i class="fas fa-smile"></i>
+                            </div>
+                            <div class="stat-info">
+                                <h3 id="moodRating">5.0</h3>
+                                <p>настрій</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Записи щоденника -->
+                    <div class="entries-container" id="entriesContainer">
+                        <div class="empty-state">
+                            <div class="empty-icon">
+                                <i class="fas fa-book"></i>
+                            </div>
+                            <h3>Ще немає записів</h3>
+                            <p>Натисніть "Додати запис", щоб почати вести щоденник</p>
+                            <button class="btn-outline" id="firstEntryBtn">
+                                <i class="fas fa-feather-alt"></i> Створити перший запис
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Швидкі дії -->
+                    <div class="quick-actions">
+                        <h4><i class="fas fa-bolt"></i> Швидкі теги:</h4>
+                        <div class="tags-container">
+                            <button class="tag-btn" data-tag="школа">🏫 Школа</button>
+                            <button class="tag-btn" data-tag="домашка">📚 Домашка</button>
+                            <button class="tag-btn" data-tag="друзі">👫 Друзі</button>
+                            <button class="tag-btn" data-tag="спорт">⚽ Спорт</button>
+                            <button class="tag-btn" data-tag="відпочинок">🎮 Відпочинок</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ІНШІ СТОРІНКИ -->
+            <div class="page" id="schedulePage">
+                <div class="schedule-container">
+                    <h2><i class="fas fa-calendar-alt"></i> Розклад занять</h2>
+                    <div class="schedule-content">
+                        <p>Функція розкладу буде додана найближчим часом</p>
+                        <button class="btn-primary" onclick="app.showNotification('Функція в розробці', 'info')">
+                            <i class="fas fa-clock"></i> Переглянути розклад
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="page" id="homeworkPage">
+                <div class="homework-container">
+                    <h2><i class="fas fa-tasks"></i> Домашні завдання</h2>
+                    <div class="homework-content">
+                        <p>Тут будуть відображатися ваші домашні завдання</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="page" id="gradesPage">
+                <div class="grades-container">
+                    <h2><i class="fas fa-chart-line"></i> Оцінки та статистика</h2>
+                    <div class="grades-content">
+                        <p>Статистика успішності буде доступна після додавання оцінок</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Модальні вікна -->
+    <div class="modal" id="loginModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2><i class="fas fa-user-graduate"></i> Вхід до ClassMate</h2>
+                <button class="close-modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="login-form">
+                    <div class="form-group">
+                        <label for="loginName">
+                            <i class="fas fa-user"></i> Ваше ім'я
+                        </label>
+                        <input type="text" id="loginName" placeholder="Наприклад: Софія Коваленко" autocomplete="off">
+                    </div>
+                    <div class="form-group">
+                        <label for="loginClass">
+                            <i class="fas fa-school"></i> Клас
+                        </label>
+                        <select id="loginClass">
+                            <option value="">Оберіть клас</option>
+                            <option value="9-A">9-А</option>
+                            <option value="9-B">9-Б</option>
+                            <option value="10-A">10-А</option>
+                            <option value="10-B">10-Б</option>
+                            <option value="11-A">11-А</option>
+                            <option value="11-B">11-Б</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>
+                            <i class="fas fa-palette"></i> Обери аватар
+                        </label>
+                        <div class="avatar-grid">
+                            <div class="avatar-choice" data-avatar="👩‍🎓">👩‍🎓</div>
+                            <div class="avatar-choice" data-avatar="👨‍🎓">👨‍🎓</div>
+                            <div class="avatar-choice" data-avatar="🦊">🦊</div>
+                            <div class="avatar-choice" data-avatar="🐯">🐯</div>
+                            <div class="avatar-choice" data-avatar="🐼">🐼</div>
+                            <div class="avatar-choice" data-avatar="🦁">🦁</div>
+                        </div>
+                    </div>
+                    <button class="btn-submit" id="loginSubmit">
+                        <i class="fas fa-sign-in-alt"></i> Увійти до системи
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Модальне вікно створення запису -->
+    <div class="modal" id="entryModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2><i class="fas fa-feather-alt"></i> Новий запис у щоденнику</h2>
+                <button class="close-modal">&times;</button>
+            </div>
+            <div class="modal-body" id="entryModalBody">
+                <!-- Буде заповнено JavaScript -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Емодзі панель -->
+    <div class="emoji-panel" id="emojiPanel">
+        <div class="emoji-categories">
+            <button class="emoji-cat active" data-cat="faces">😃</button>
+            <button class="emoji-cat" data-cat="animals">🐶</button>
+            <button class="emoji-cat" data-cat="objects">📚</button>
+            <button class="emoji-cat" data-cat="symbols">❤️</button>
+        </div>
+        <div class="emoji-grid" id="emojiGrid">
+            <!-- Емодзі будуть додані через JS -->
+        </div>
+    </div>
+
+    <!-- Прихований input для завантаження зображень -->
+    <input type="file" id="imageUploadInput" accept="image/*" style="display: none;">
+
+    <!-- Скрипти -->
+    <script src="script.js"></script>
+    <script src="diary.js"></script>
+</body>
+</html>
